@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import GifList from './GifList';
-import GifSearch from './GifSearch';
 
 class GifListContainer extends Component {
   constructor() {
@@ -11,26 +10,24 @@ class GifListContainer extends Component {
   }
 
   componentDidMount() {
-    // Fetch initial data (you can fetch data on form submit as well)
-    this.performSearch('dolphin');
-  }
-
-  performSearch = (query) => {
-    const apiKey = 'YOUR API KEY'; // Replace with your actual API key
-    const url = `https://api.giphy.com/v1/gifs/search?q=${query}&api_key=${apiKey}&rating=g`;
-
-    fetch(url)
+    // Define your Giphy API key
+    const apiKey = 'rd8I9LurhRmrCCXzwM4A9Y3Qcx1CIQaf';
+    
+    // Make the API request to retrieve trending GIFs
+    fetch(`https://api.giphy.com/v1/gifs/trending?api_key=${apiKey}&rating=g`)
       .then((response) => response.json())
       .then((data) => {
-        this.setState({ gifs: data.data.slice(0, 3) }); // Store the first 3 gifs in state
+        // Update the state with the fetched trending GIFs
+        this.setState({ gifs: data.data.slice(0, 3) }); // Display the first 3 trending GIFs
       })
-      .catch((error) => console.error('Error fetching data: ', error));
-  };
+      .catch((error) => {
+        console.error('Error fetching trending GIFs: ', error);
+      });
+  }
 
   render() {
     return (
       <div>
-        <GifSearch onSearch={this.performSearch} />
         <GifList gifs={this.state.gifs} />
       </div>
     );
